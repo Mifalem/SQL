@@ -38,7 +38,12 @@ public class LoginTest {
         var verificationCode = SQLHelper.getVerificationCode();
         verificationPage.validVerify(verificationCode.getCode());
     }
-
+    @Test
+    void shouldBeErrorMessageIfUserDoesNotExist() {
+        var authInfo = DataHelper.generateRandomUser();
+        var verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.errorMessageVerify("Ошибка! \nНеверно указан логин или пароль");
+    }
     @Test
     void shouldBeErrorMessageIfExistAndInvalidVerificationCode() {
         var authInfo = DataHelper.getAuthInfoFromDataTest();
@@ -47,11 +52,5 @@ public class LoginTest {
         var verificationCode = DataHelper.generateRandomVerificationCode();
         verificationPage.verify(verificationCode.getCode());
         verificationPage.errorMessageVerify("Ошибка! \nНеверно указан код! Попробуйте ещё раз.");
-    }
-    @Test
-    void shouldBeErrorMessageIfUserDoesNotExist() {
-        var authInfo = DataHelper.generateRandomUser();
-        var verificationPage = loginPage.validLogin(authInfo);
-        verificationPage.errorMessageVerify("Ошибка! \nНеверно указан логин или пароль");
     }
 }

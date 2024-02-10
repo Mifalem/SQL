@@ -10,8 +10,8 @@ import static com.codeborne.selenide.Selenide.$;
 public class LoginPage {
     private final SelenideElement loginField = $("[data-test-id=login] input");
     private final SelenideElement passwordField = $("[data-test-id=password] input");
-    private final SelenideElement buttonLogin = $("[data-test-id=action-login] .button__content");
-    private final SelenideElement errorNotification = $("[data-test-id=error-notification] .notification__content");
+    private final SelenideElement buttonLogin = $("[data-test-id=action-login]");
+    private final SelenideElement errorNotification = $("[data-test-id='error-notification'] .notification__content");
 
     public void errorMessageLogin(String text) {
         errorNotification.shouldHave(Condition.exactText(text)).shouldBe(visible);
