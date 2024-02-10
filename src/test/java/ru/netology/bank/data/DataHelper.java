@@ -40,7 +40,7 @@ public class DataHelper {
     }
 
     public static VerificationCode generateRandomVerificationCode() {
-        return new VerificationCode(FAKER.numerify("*****"));
+        return new VerificationCode(FAKER.numerify("#####"));
     }
 }
 

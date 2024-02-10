@@ -8,7 +8,6 @@ import ru.netology.bank.data.DataHelper;
 import ru.netology.bank.data.SQLHelper;
 import ru.netology.bank.page.LoginPage;
 
-
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.bank.data.SQLHelper.cleanAuthCodes;
 import static ru.netology.bank.data.SQLHelper.cleanData;
@@ -17,12 +16,12 @@ public class LoginTest {
     LoginPage loginPage;
 
     @AfterEach
-    void clearAuthCodes() {
+    void tearDown() {
         cleanAuthCodes();
     }
 
     @AfterAll
-    static void clearAll() {
+    static void tearDownAll() {
         cleanData();
     }
 
@@ -32,13 +31,27 @@ public class LoginTest {
     }
 
     @Test
-
-    public void shouldLogin() {
-
+    void shouldLogin() {
         var authInfo = DataHelper.getAuthInfoFromDataTest();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.verificationPageVisible();
         var verificationCode = SQLHelper.getVerificationCode();
         verificationPage.validVerify(verificationCode.getCode());
+    }
+
+    @Test
+    void shouldBeErrorMessageIfExistAndInvalidVerificationCode() {
+        var authInfo = DataHelper.getAuthInfoFromDataTest();
+        var verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.verificationPageVisible();
+        var verificationCode = DataHelper.generateRandomVerificationCode();
+        verificationPage.verify(verificationCode.getCode());
+        verificationPage.errorMessageVerify("Ошибка! \nНеверно указан код! Попробуйте ещё раз.");
+    }
+    @Test
+    void shouldBeErrorMessageIfUserDoesNotExist() {
+        var authInfo = DataHelper.generateRandomUser();
+        var verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.errorMessageVerify("Ошибка! \nНеверно указан логин или пароль");
     }
 }
